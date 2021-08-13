@@ -21,6 +21,10 @@ class Hom:
 		circles = nt.power_set(self.imgs)
 		return sum(math.gcd(sum(circle), self.b) == 1 for circle in circles)
 
+	# Returns the number of essential invariant circles of the automorphism associated to the homomorphism
+	def num_of_ess_inv_circ(self):
+		circles = list(nt.power_set(self.imgs))[self.a + 1, -1]
+		return sum(math.gcd(sum(circle), self.b) == 1 for circle in circles if )
 
 def surj_homs(a,b):
 	# Returns all the surjective homomorphisms from $\ZZ^a$ into $\ZZ/b\ZZ$
@@ -28,28 +32,6 @@ def surj_homs(a,b):
 	surj_imgs_of_gens = [img for img in imgs_of_gens
 	if (nt.gcd_mult(img) == 1 and sum(img) % b != 0)]
 	return [Hom(a, b, img) for img in surj_imgs_of_gens]
-
-def num_of_ess_inv_circ(hom):
-	# Returns the number of essential invariant circles associated to a given homomorphism
-	a = hom.a
-	b = hom.b
-	imgs = hom.gens
-
-	circ_subsets = tuple(itertools.product([0,1], repeat=a))
-	ess_circ_subsets = filter(lambda circ: 1 < sum(circ) < a, circ_subsets)
-	num_of_ess_inv_circ = 0
-
-	for subset in ess_circ_subsets:
-		count = 0
-
-		for i in range(a):
-			if subset[i] == 1:
-				count += imgs[i]
-
-		if math.gcd(count, b) == 1: 
-			num_of_ess_inv_circ += 1
-
-	return(num_of_ess_inv_circ)
 
 def genus(hom):
 	# Returns the genus of the surface associated to a homomorphism
