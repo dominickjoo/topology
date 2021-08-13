@@ -15,7 +15,7 @@ def is_prime(num):
 def gcd_mult(nums):
     return reduce(math.gcd, nums)
 
-# Returns the power set of a given iterable WITHOUT the empty set
+# Returns the power set of a given iterable
 def power_set(iterable):
     s = list(iterable)
     return itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(len(s)+1))
