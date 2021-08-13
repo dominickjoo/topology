@@ -8,3 +8,7 @@ def is_prime(num):
         if num % x == 0:
             return False
     return True
+
+# Returns the greatest common divisor of all the integers in the given list
+def gcd_mult(nums):
+    return reduce(math.gcd, nums)
