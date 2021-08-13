@@ -1,47 +1,33 @@
 import math
 import itertools
 from functools import reduce
+import nt
 
-# A homomorphism from $\ZZ^a into $\ZZ/b\ZZ$ is represented as (a, b, [g_1, \ldots, g_a])
+# A homomorphism from Z^a into Z/bZ is represented as (a, b, [g_1, \ldots, g_a]), where the g_i are the images of the generators of Z^a
 class Hom:
-	def __init__(self, , b, gens):
+	def __init__(self, a, b, imgs):
 		self.a = a
 		self.b = b
-		self.gens = gens
+		self.imgs = imgs
 
 	def __repr__(self):
-		return f"Hom(a: {self.a}, b: {self.b}, gens: {self.gens})"
+		return f"Hom({self.a}, {self.b}, {self.imgs})"
 
 	def __str__(self):
-		return f"Hom(a: {self.a}, b: {self.b}, gens: {self.gens})"
+		return f"Z^{self.a} -> Z/{self.b}Z, generators {self.imgs}"
+
+	# Returns the number of invariant circles of the automorphism associated to the homomorphism
+	def num_of_inv_circ(self):
+		circles = nt.power_set(self.imgs)
+		return sum(math.gcd(sum(circle), self.b) == 1 for circle in circles)
+
 
 def surj_homs(a,b):
 	# Returns all the surjective homomorphisms from $\ZZ^a$ into $\ZZ/b\ZZ$
 	imgs_of_gens = itertools.product(range(1,b), repeat = a)
 	surj_imgs_of_gens = [img for img in imgs_of_gens
-	if (gcd_mult(img) == 1 and sum(img) % b != 0)]
+	if (nt.gcd_mult(img) == 1 and sum(img) % b != 0)]
 	return [Hom(a, b, img) for img in surj_imgs_of_gens]
-
-def num_of_inv_circ(hom):
-	# Returns the number of invariant circles associated to a given homomorphism
-	a = hom.a
-	b = hom.b
-	imgs = hom.gens
-
-	circ_subsets = tuple(list(itertools.product([0,1], repeat=a))[1:])
-	num_of_inv_circ = 0
-
-	for subset in circ_subsets:
-		count = 0
-
-		for i in range(a):
-			if subset[i] == 1:
-				count += imgs[i]
-
-		if math.gcd(count, b) == 1: 
-			num_of_inv_circ += 1
-
-	return(num_of_inv_circ)
 
 def num_of_ess_inv_circ(hom):
 	# Returns the number of essential invariant circles associated to a given homomorphism
