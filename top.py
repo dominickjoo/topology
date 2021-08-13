@@ -1,14 +1,12 @@
 import math
 import itertools
 from functools import reduce
-import bisect
 from statistics import mean
 from pprint import pprint
 
-
 # A homomorphism from $\ZZ^a into $\ZZ/b\ZZ$ is represented as (a, b, [g_1, \ldots, g_a])
 class Hom:
-	def __init__(self, a, b, gens):
+	def __init__(self, , b, gens):
 		self.a = a
 		self.b = b
 		self.gens = gens
@@ -19,20 +17,9 @@ class Hom:
 	def __str__(self):
 		return f"Hom(a: {self.a}, b: {self.b}, gens: {self.gens})"
 
-def is_prime(num):
-    """Returns True if the number is prime
-    else False."""
-    if num == 0 or num == 1:
-        return False
-    for x in range(2, num):
-        if num % x == 0:
-            return False
-    else:
-        return True
-
-def gcd_mult(list):
+def gcd_mult(nums):
 	# Returns the gcd of all the numbers in a list
-    return reduce(math.gcd, list)
+    return reduce(math.gcd, nums)
 
 def surj_homs(a,b):
 	# Returns all the surjective homomorphisms from $\ZZ^a$ into $\ZZ/b\ZZ$
