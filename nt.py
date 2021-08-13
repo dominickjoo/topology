@@ -1,4 +1,5 @@
 import math
+from functools import reduce
 
 # Returns True if given number is prime, else False
 def is_prime(num):
