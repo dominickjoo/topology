@@ -24,7 +24,7 @@ class Hom:
 	# Returns the number of essential invariant circles of the automorphism associated to the homomorphism
 	def num_of_ess_inv_circ(self):
 		circles = list(nt.power_set(self.imgs))[self.a + 1, -1]
-		return sum(math.gcd(sum(circle), self.b) == 1 for circle in circles if )
+		return sum(math.gcd(sum(circle), self.b) == 1 for circle in circles)
 
 def surj_homs(a,b):
 	# Returns all the surjective homomorphisms from $\ZZ^a$ into $\ZZ/b\ZZ$
