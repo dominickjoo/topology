@@ -40,6 +40,21 @@ class Hom:
 
 		return int(1 - n + (n/2)*total)
 
+	# Returns the number of circles whose image is exactly n
+	def num_of_sum_n_circ(self, n):
+		circ_subsets = tuple(list(itertools.product([0,1], repeat=self.a))[1:])
+		num_of_sum_n_circ = 0
+
+		for subset in circ_subsets:
+			count = 0
+			for i in range(self.a):
+				if subset[i]:
+					count += self.imgs[i]
+			if count % self.b == n: 
+				num_of_sum_n_circ += 1
+
+		return(num_of_sum_n_circ)
+
 # Returns the maximum order of an automorphism of S_g, for g >= 2
 def max_ord(g):
 	if g % 2 == 1:
@@ -47,24 +62,20 @@ def max_ord(g):
 	if g % 2 == 0:
 		return(4*g + 4)
 
+# Returns a list of all the surjective homomorphisms from Z^a into Z/bZ
 def surj_homs(a,b):
-	# Returns all the surjective homomorphisms from $\ZZ^a$ into $\ZZ/b\ZZ$
 	imgs_of_gens = itertools.product(range(1,b), repeat = a)
 	surj_imgs_of_gens = [img for img in imgs_of_gens
 	if (nt.gcd_mult(img) == 1 and sum(img) % b != 0)]
 	return [Hom(a, b, img) for img in surj_imgs_of_gens]
 
+# Returns a list of all homomorphisms of order n and with l branch points, along with the number of invariant circles associated to each one
 def nums_of_inv_circ(l, n):
-	# Returns all homomorphisms of order $n$ and with $l$ branch points, along with the number of invariant circles associated to each one
 	homs = surj_homs(l-1,n)
-	return [num_of_inv_circ(hom) for hom in homs]
+	return [(hom, hom.num_of_inv_circ()) for hom in homs]
 
-	# can return ordered pair with hom
-	# return [(hom, num_of_inv_circ(hom)) for hom in homs]
-
-
+# Given a genus g, returns a list of the possible values for (l, n) as tuples
 def get_l_n(g):
-	# Given a genus, returns the possible values for l and n
 	possibles = []
 	l = 3
 	n = 2
@@ -72,91 +83,26 @@ def get_l_n(g):
 	while 2*g - 2 >= n*(l/2 - 2):
 		possibles.append((l,n))
 		n += 1
-
 		if not (2*g - 2 >= n*(l/2 - 2) and n <= 4*g + 2):
 			l += 1
 			n = 2
 
-	return(possibles)		
+	return(possibles)
 
-
-def num_of_sum_one_circ(hom):
-	# Returns the number of circles associated to a given homomorphism that are sent to 1
-	a = hom[0]
-	b = hom[1]
-	imgs = hom[2]
-
-	circ_subsets = tuple(list(itertools.product([0,1], repeat=a))[1:])
-	num_of_sum_one_circ = 0
-
-	for subset in circ_subsets:
-		count = 0
-
-		for i in range(a):
-			if subset[i] == 1:
-				count += imgs[i]
-
-		if count % b == 1: 
-			num_of_sum_one_circ += 1
-
-	return(num_of_sum_one_circ)
-
-def nums_of_sum_one_circ(l, n):
-	# Returns all homomorphisms of order $n$ and with $l$ branch points, along with the number of circles that are sent to 1 for each homomorphism
-	homs = surj_homs(l-1,n)
-	nums = map(lambda hom: num_of_sum_one_circ(hom), homs)
-	return(list(nums))
-
-def num_of_sum_zero_circ(hom):
-	# Returns the number of circles associated to a given homomorphism that are sent to 1
-	a = hom[0]
-	b = hom[1]
-	imgs = hom[2]
-
-	circ_subsets = tuple(list(itertools.product([0,1], repeat=a))[1:])
-	num_of_sum_one_circ = 0
-
-	for subset in circ_subsets:
-		count = 0
-
-		for i in range(a):
-			if subset[i] == 1:
-				count += imgs[i]
-
-		if count % b == 0: 
-			num_of_sum_one_circ += 1
-
-	return(num_of_sum_one_circ)
-
+# Returns a list of all homomorphisms of order n and with l branch points, along with the number of circles whose image is01 for each homomorphism
 def nums_of_sum_zero_circ(l, n):
-	# Returns all homomorphisms of order $n$ and with $l$ branch points, along with the number of circles that are sent to 1 for each homomorphism
 	homs = surj_homs(l-1,n)
-	nums = map(lambda hom: num_of_sum_zero_circ(hom), homs)
-	return(list(nums))
+	homs_with_nums = map(lambda hom: hom.num_of_sum_n_circ(0), homs)
+	return(list(homs_with_nums))
 
-def num_of_sum_two_circ(hom):
-	# Returns the number of circles associated to a given homomorphism that are sent to 1
-	a = hom[0]
-	b = hom[1]
-	imgs = hom[2]
+# Returns a list of all homomorphisms of order n and with l branch points, along with the number of circles that are sent to 1 for each homomorphism
+def nums_of_sum_one_circ(l, n):
+	homs = surj_homs(l-1,n)
+	homs_with_nums = map(lambda hom: hom.num_of_sum_n_circ(1), homs)
+	return(list(homs_with_nums))
 
-	circ_subsets = tuple(list(itertools.product([0,1], repeat=a))[1:])
-	num_of_sum_one_circ = 0
-
-	for subset in circ_subsets:
-		count = 0
-
-		for i in range(a):
-			if subset[i] == 1:
-				count += imgs[i]
-
-		if count % b == 2: 
-			num_of_sum_one_circ += 1
-
-	return(num_of_sum_one_circ)
-
+# Returns a list of all homomorphisms of order n and with l branch points, along with the number of circles that are sent to 2 for each homomorphism
 def nums_of_sum_two_circ(l, n):
-	# Returns all homomorphisms of order $n$ and with $l$ branch points, along with the number of circles that are sent to 1 for each homomorphism
 	homs = surj_homs(l-1,n)
-	nums = map(lambda hom: num_of_sum_two_circ(hom), homs)
-	return(list(nums))
+	homs_with_nums = map(lambda hom: hom.num_of_sum_n_circ(2), homs)
+	return(list(homs_with_nums))
