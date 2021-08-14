@@ -42,6 +42,13 @@ class Hom:
 
 		return g
 
+# Returns the maximum order of an automorphism of S_g, for g >= 2
+def max_ord(g):
+	if g % 2 == 1:
+		return(4*g + 2)
+	if g % 2 == 0:
+		return(4*g + 4)
+
 def surj_homs(a,b):
 	# Returns all the surjective homomorphisms from $\ZZ^a$ into $\ZZ/b\ZZ$
 	imgs_of_gens = itertools.product(range(1,b), repeat = a)
@@ -56,39 +63,6 @@ def nums_of_inv_circ(l, n):
 
 	# can return ordered pair with hom
 	# return [(hom, num_of_inv_circ(hom)) for hom in homs]
-
-def max_ord(g):
-	# Returns the maximum order of an automorphism of $S_g$, for $g \geq 2$.
-	if g % 2 == 1:
-		return(4*g + 2)
-	if g % 2 == 0:
-		return(4*g + 4)
-
-def foo(g):
-	n = 4*g + 2
-	l = 3
-
-	homs = surj_homs(l-1,n)
-	genus_g_homs = filter(lambda hom: genus(hom) == g, homs)
-	genus_g_homs_with_nums = map(lambda hom: (num_of_inv_circ(hom),hom), genus_g_homs)
-	return(genus_g_homs_with_nums)
-
-def bar(g):
-	n = 2*g-4
-	l = 4
-
-	homs = surj_homs(l-1,n)
-	genus_g_homs = filter(lambda hom: genus(hom) == g, homs)
-	genus_g_homs_with_nums = map(lambda hom: (num_of_ess_inv_circ(hom),hom), genus_g_homs)
-	return(genus_g_homs_with_nums)
-
-def barn(g,n):
-	l = 4
-
-	homs = surj_homs(l-1,n)
-	genus_g_homs = filter(lambda hom: genus(hom) == g, homs)
-	genus_g_homs_with_nums = map(lambda hom: (num_of_ess_inv_circ(hom),hom), genus_g_homs)
-	return(genus_g_homs_with_nums)
 
 
 def get_l_n(g):
