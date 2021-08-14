@@ -26,32 +26,28 @@ class Hom:
 		circles = list(nt.power_set(self.imgs))[self.a + 1, -1]
 		return sum(math.gcd(sum(circle), self.b) == 1 for circle in circles)
 
+	# Returns the genus of the surface associated to the homomorphism
+	def genus(self):
+		l = self.a + 1
+		n = self.b
+		count = 0
+
+		for img in imgs:
+			count += 1 - math.gcd(n,img)/n
+		total = sum(imgs) % n
+
+		count += 1 - math.gcd(n,total)/n
+
+		g = int(1 - n + (n/2)*total)
+
+		return g
+
 def surj_homs(a,b):
 	# Returns all the surjective homomorphisms from $\ZZ^a$ into $\ZZ/b\ZZ$
 	imgs_of_gens = itertools.product(range(1,b), repeat = a)
 	surj_imgs_of_gens = [img for img in imgs_of_gens
 	if (nt.gcd_mult(img) == 1 and sum(img) % b != 0)]
 	return [Hom(a, b, img) for img in surj_imgs_of_gens]
-
-def genus(hom):
-	# Returns the genus of the surface associated to a homomorphism
-	l = hom.a + 1
-	n = hom.b
-	imgs = hom.gens
-
-	g = 1 - n
-	sum_ = 0
-
-	for img in imgs:
-		sum_ += 1 - (math.gcd(n,img)/n)
-
-	total_img = reduce(lambda x,y: x + y,imgs) % n
-
-	sum_ += 1 - (math.gcd(n,total_img)/n)
-
-	g += (n/2)*sum_
-
-	return round(g)
 
 def nums_of_inv_circ(l, n):
 	# Returns all homomorphisms of order $n$ and with $l$ branch points, along with the number of invariant circles associated to each one
