@@ -87,22 +87,22 @@ def get_l_n(g):
 			l += 1
 			n = 2
 
-	return(possibles)
+	return possibles
 
 # Returns a list of all homomorphisms of order n and with l branch points, along with the number of circles whose image is01 for each homomorphism
 def nums_of_sum_zero_circ(l, n):
 	homs = surj_homs(l-1,n)
 	homs_with_nums = map(lambda hom: hom.num_of_sum_n_circ(0), homs)
-	return(list(homs_with_nums))
+	return list(homs_with_nums)
 
 # Returns a list of all homomorphisms of order n and with l branch points, along with the number of circles that are sent to 1 for each homomorphism
 def nums_of_sum_one_circ(l, n):
 	homs = surj_homs(l-1,n)
 	homs_with_nums = map(lambda hom: hom.num_of_sum_n_circ(1), homs)
-	return(list(homs_with_nums))
+	return list(homs_with_nums)
 
 # Returns a list of all homomorphisms of order n and with l branch points, along with the number of circles that are sent to 2 for each homomorphism
 def nums_of_sum_two_circ(l, n):
 	homs = surj_homs(l-1,n)
 	homs_with_nums = map(lambda hom: hom.num_of_sum_n_circ(2), homs)
-	return(list(homs_with_nums))
+	return list(homs_with_nums)
